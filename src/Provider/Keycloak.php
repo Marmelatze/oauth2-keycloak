@@ -68,35 +68,6 @@ class Keycloak extends AbstractProvider
     }
 
     /**
-     * Attempts to decrypt the given response.
-     *
-     * @param  string|array|null $response
-     *
-     * @return string|array|null
-     */
-    public function decryptResponse($response)
-    {
-        if (!is_string($response)) {
-            return $response;
-        }
-
-        if ($this->usesEncryption()) {
-            return json_decode(
-                json_encode(
-                    JWT::decode(
-                        $response,
-                        $this->encryptionKey,
-                        array($this->encryptionAlgorithm)
-                    )
-                ),
-                true
-            );
-        }
-
-        throw EncryptionConfigurationException::undeterminedEncryption();
-    }
-
-    /**
      * Get authorization url to begin OAuth flow
      *
      * @return string
@@ -226,8 +197,6 @@ class Keycloak extends AbstractProvider
     public function getResourceOwner(AccessToken $token)
     {
         $response = $this->fetchResourceOwnerDetails($token);
-
-        $response = $this->decryptResponse($response);
 
         return $this->createResourceOwner($response, $token);
     }
