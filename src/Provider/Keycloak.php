@@ -80,8 +80,6 @@ class Keycloak extends AbstractProvider
         if (!is_string($response)) {
             return $response;
         }
-        dump($this->encryptionKey);
-        dump($this->encryptionAlgorithm);
 
         if ($this->usesEncryption()) {
             $key = new Key($this->encryptionKey, $this->encryptionAlgorithm);
